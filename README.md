@@ -130,6 +130,8 @@ Take a look at this repo to see an example of Ansible code that's stored in a "G
 
 TODO:  add source code
 
+* _(Booooo, hiss.  [I can't run the Ansible CLI from a Windows machine](https://docs.ansible.com/ansible/latest/os_guide/intro_windows.html#using-windows-as-the-control-node).)_
+
 Ideally, one day, you and your colleagues won't even need to be able to personally SSH into your VM or personally run Ansible against it.  But for now, let's just make sure that GitHub _also_ can do so.
 
 TODO:  instructions
