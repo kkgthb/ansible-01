@@ -1,0 +1,26 @@
+---
+- name: "My first verifications"
+  tasks:
+    - name: "Validate /helloworld.txt"
+      block:
+        - name: "Find the /helloworld.txt file and put it in Ansible memory"
+          ansible.builtin.file:
+            path: "/helloworld.txt"
+            state: "file"
+          register: "result_hello_world_file"
+
+        - name: "Validate that /helloworld.txt exists"
+          ansible.builtin.assert:
+            that:
+              - result_hello_world_file.state == 'file'
+
+        - name: "Validate that /helloworld.txt permissions mode is 644"
+          ansible.builtin.assert:
+            that:
+              - result_hello_world_file.mode == '0644'
+
+        - name: "Validate that /helloworld.txt has the right owner and group"
+          ansible.builtin.assert:
+            that:
+              - result_hello_world_file.owner == 'username_who_should_own_the_file'
+              - result_hello_world_file.group == 'group_name_the_file_should_be_in'
