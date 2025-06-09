@@ -1,17 +1,10 @@
-# # Terraformize my usual demo environment variables
-# [Environment]::SetEnvironmentVariable( `
-#         'TF_VAR_entra_tenant_id', `
-#         [Environment]::GetEnvironmentVariable('DEMOS_my_entra_tenant_id', 'User'), `
-#         'User' `
-# )
-# [Environment]::SetEnvironmentVariable( `
-#         'TF_VAR_az_sub_id', `
-#         [Environment]::GetEnvironmentVariable('DEMOS_my_azure_subscription_id', 'User'), `
-#         'User' `
-# )
-# [Environment]::SetEnvironmentVariable( `
-#         'TF_VAR_workload_nickname', `
-#         [Environment]::GetEnvironmentVariable('DEMOS_my_workload_nickname', 'User'), `
-#         'User' `
-# )
+Push-Location("$PsScriptRoot/AA-tf")
 
+terraform init
+
+terraform plan `
+    -var entra_tenant_id="$([Environment]::GetEnvironmentVariable('DEMOS_my_entra_tenant_id', 'User'))" `
+    -var az_sub_id="$([Environment]::GetEnvironmentVariable('DEMOS_my_azure_subscription_id', 'User'))" `
+    -var workload_nickname="$([Environment]::GetEnvironmentVariable('DEMOS_my_workload_nickname', 'User'))"
+
+Pop-Location
