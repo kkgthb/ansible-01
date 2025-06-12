@@ -1,0 +1,9 @@
+- name: 'READ:  Query "{{ param_path }}" file/folder status.'
+  ansible.builtin.stat:
+    path: "{{ param_path }}"
+  register: "stat_param_path"
+- name: 'READ:  Assert that a file/folder named "{{ param_path }}" exists.'
+  ansible.builtin.assert:
+    that:
+      - "stat_param_path.stat.exists"
+    fail_msg: '"{{ param_path }}" does not exist but should.'
