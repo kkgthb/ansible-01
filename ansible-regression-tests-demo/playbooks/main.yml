@@ -6,7 +6,7 @@
 # 2. It has a "hosts" property.
 # 3. It has a "tasks" property.
 - name: "My one and only play"
-  hosts: "{{ ansible_limit | d('all') }}"
+  hosts: "all"
   tasks:
     - name: "Do the hello world stuff"
       ansible.builtin.import_tasks:
