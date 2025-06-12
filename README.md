@@ -14,6 +14,16 @@ However, if that resource just so happens to be a virtual machine, then once it'
 
 ---
 
+## Update:  code that may no longer match this readme but is my latest as of 2025-06-12
+
+```powershell
+Push-Location -Path './ansible-regression-tests-demo'
+ansible-playbook './playbooks/main.yml'
+Pop-Location
+```
+
+---
+
 ## Example Ansible use cases
 
 * fetch values out of a system like Azure Key Vault or AWS Secrets Manager and saving them into the VM's operating system environment variables

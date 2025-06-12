@@ -1,45 +1,47 @@
 ---
-- name: "My first verifications"
-  hosts: "{{ ansible_limit | d('all') }}"
-  tasks:
-    - name: "Validate /helloworld.txt"
+# This "verify.yml" file is a TODO because it starts with three dashes up top and TODO.
+
+# Within the TODO, this "Do helloworld.txt" list item is a "task" which I can tell because:
+# 1. It does NOT have a "hosts" property.
+# 2. It does NOT have a "tasks" property.
+- name: "Do helloworld.txt"
+  block:
+    - name: "These are the file paths we will be using."
       block:
-        - name: "These are the file paths we will be using."
+        - name: 'Create (if necessary) and validate "files_go_here" folder'
           block:
-            - name: 'Create (if necessary) and validate "files_go_here" folder'
-              block:
-                - name: 'Create the "files_go_here" folder if it does not exist'
-                  ansible.builtin.file:
-                    path: "{{ (lookup('ansible.builtin.env', 'HOME'), 'ansible_play', 'files_go_here') | path_join }}"
-                    state: "directory"
-                  register: folder_files_go_here
-                - name: 'Check the latest status of the folder named "{{ folder_files_go_here.path }}".'
-                  ansible.builtin.stat:
-                    path: "{{ folder_files_go_here.path }}"
-                  register: "stat_folder_files_go_here"
-                - name: 'Assert that a folder named "{{ folder_files_go_here.path }}" exists.'
-                  ansible.builtin.assert:
-                    that:
-                      - "stat_folder_files_go_here.stat.exists"
-                    fail_msg: 'Folder "{{ folder_files_go_here.path }}" does not exist but should.'
-            - name: "Declare the helloworld.txt file path"
-              ansible.builtin.set_fact:
-                path_file_hello_world: "{{ (folder_files_go_here.path, 'helloworld.txt') | path_join }}"
-        - name: '"helloworld.txt" file operations'
-          block:
-            - name: 'Create the "helloworld.txt" file if it does not yet exist, and make sure it is filled with the correct content.'
-              ansible.builtin.copy:
-                dest: "{{ path_file_hello_world }}"
-                force: false # Interesting observation:  Ansible seems to consider a trailing newline vs. not the same content, and will skip this task if that's the only difference.
-                content: |-
-                  hello
-                  world
-              register: copy_into_hello_world
-            - name: 'Fetch the current status of the "helloworld.txt" file (round 1)'
+            - name: 'Create the "files_go_here" folder if it does not exist'
+              ansible.builtin.file:
+                path: "{{ (lookup('ansible.builtin.env', 'HOME'), 'ansible_play', 'files_go_here') | path_join }}"
+                state: "directory"
+              register: folder_files_go_here
+            - name: 'Check the latest status of the folder named "{{ folder_files_go_here.path }}".'
               ansible.builtin.stat:
-                path: "{{ copy_into_hello_world.dest }}"
-              register: "stat_file_hello_world_v001"
-            - name: 'Validate that the "helloworld.txt" exists'
+                path: "{{ folder_files_go_here.path }}"
+              register: "stat_folder_files_go_here"
+            - name: 'Assert that a folder named "{{ folder_files_go_here.path }}" exists.'
               ansible.builtin.assert:
                 that:
-                  - "stat_file_hello_world_v001.stat.exists"
+                  - "stat_folder_files_go_here.stat.exists"
+                fail_msg: 'Folder "{{ folder_files_go_here.path }}" does not exist but should.'
+        - name: "Declare the helloworld.txt file path"
+          ansible.builtin.set_fact:
+            path_file_hello_world: "{{ (folder_files_go_here.path, 'helloworld.txt') | path_join }}"
+    - name: '"helloworld.txt" file operations'
+      block:
+        - name: 'Create the "helloworld.txt" file if it does not yet exist, and make sure it is filled with the correct content.'
+          ansible.builtin.copy:
+            dest: "{{ path_file_hello_world }}"
+            force: true
+            content: |-
+              hello
+              world
+          register: copy_into_hello_world
+        - name: 'Fetch the current status of the "helloworld.txt" file (round 1)'
+          ansible.builtin.stat:
+            path: "{{ copy_into_hello_world.dest }}"
+          register: "stat_file_hello_world_v001"
+        - name: 'Validate that the "helloworld.txt" exists'
+          ansible.builtin.assert:
+            that:
+              - "stat_file_hello_world_v001.stat.exists"

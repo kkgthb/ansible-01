@@ -1,0 +1,13 @@
+---
+# This "main.yml" file is a playbook, because it starts with three dashes up top and because its top-level entries are "plays."
+
+# Within the playbook, this "My one and only play" list item is a "play," which I can tell because:
+# 1. It is a top-level list item in this file
+# 2. It has a "hosts" property.
+# 3. It has a "tasks" property.
+- name: "My one and only play"
+  hosts: "{{ ansible_limit | d('all') }}"
+  tasks:
+    - name: "Do the hello world stuff"
+      ansible.builtin.import_tasks:
+        file: "../tasks/verify.yml"
