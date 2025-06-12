@@ -6,7 +6,7 @@
 # 2. It does NOT have a "tasks" property.
 - name: "Do helloworld.txt"
   block:
-    - name: "These are the file paths we will be using."
+    - name: "Folder write and validate"
       block:
         - name: 'Create (if necessary) and validate "files_go_here" folder'
           block:
@@ -20,7 +20,7 @@
                 name: "../roles/common/assert_file_or_folder_exists"
               vars:
                 param_path: "{{ folder_files_go_here.path }}"
-    - name: '"helloworld.txt" file operations'
+    - name: 'File write and validate'
       block:
         - name: 'WRITE:  Create the "helloworld.txt" file if it does not yet exist, and make sure it is filled with the correct content.'
           ansible.builtin.copy:
