@@ -4,10 +4,9 @@
 # Within the playbook, this "My one and only play" list item is a "play," which I can tell because:
 # 1. It is a top-level list item in this file
 # 2. It has a "hosts" property.
-# 3. It has a "tasks" property.
+# 3. It has a "tasks" or "roles" property.
 - name: "My one and only play"
   hosts: "all"
   tasks:
-    - name: "Do the hello world stuff"
-      ansible.builtin.import_tasks:
-        file: "../tasks/verify.yml"
+    - ansible.builtin.import_role:
+        name: "../roles/helloworld"
