@@ -17,7 +17,7 @@ However, if that resource just so happens to be a virtual machine, then once it'
 ## Update:  code that may no longer match this readme but is my latest as of 2025-06-12
 
 ```powershell
-Push-Location -Path './ansible-regression-tests-demo'
+Push-Location -Path './ansible_demo_01'
 ansible-playbook './playbooks/main.yml'
 Pop-Location
 ```
