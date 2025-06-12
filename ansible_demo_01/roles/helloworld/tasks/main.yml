@@ -1,9 +1,3 @@
----
-# This "helloworld/main.yml" file is a TODO because it starts with three dashes up top and because TODO.
-
-# Within the TODO, this "Do helloworld.txt" list item is a "task" which I can tell because:
-# 1. It does NOT have a "hosts" property.
-# 2. It does NOT have a "tasks" property.
 - name: "Do helloworld.txt"
   block:
     - name: "Folder write and validate"
