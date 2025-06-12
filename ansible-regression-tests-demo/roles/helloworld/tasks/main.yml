@@ -1,0 +1,37 @@
+---
+# This "helloworld/main.yml" file is a TODO because it starts with three dashes up top and because TODO.
+
+# Within the TODO, this "Do helloworld.txt" list item is a "task" which I can tell because:
+# 1. It does NOT have a "hosts" property.
+# 2. It does NOT have a "tasks" property.
+- name: "Do helloworld.txt"
+  block:
+    - name: "These are the file paths we will be using."
+      block:
+        - name: 'Create (if necessary) and validate "files_go_here" folder'
+          block:
+            - name: 'WRITE:  Create the "files_go_here" folder if it does not exist'
+              ansible.builtin.file:
+                path: "{{ (lookup('ansible.builtin.env', 'HOME'), 'ansible_play', 'files_go_here') | path_join }}"
+                state: "directory"
+              register: folder_files_go_here
+            - name: "READ:  validator"
+              ansible.builtin.import_role:
+                name: "../roles/common/assert_file_or_folder_exists"
+              vars:
+                param_path: "{{ folder_files_go_here.path }}"
+    - name: '"helloworld.txt" file operations'
+      block:
+        - name: 'WRITE:  Create the "helloworld.txt" file if it does not yet exist, and make sure it is filled with the correct content.'
+          ansible.builtin.copy:
+            dest: "{{ (folder_files_go_here.path, 'helloworld.txt') | path_join }}"
+            force: true
+            content: |-
+              hello
+              world
+          register: copy_into_hello_world
+        - name: "READ:  validator"
+          ansible.builtin.import_role:
+            name: "../roles/common/assert_file_or_folder_exists"
+          vars:
+            param_path: "{{ copy_into_hello_world.dest }}"
