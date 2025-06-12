@@ -1,1 +1,5 @@
-I haven't gotten Ansible up and running yet, so I have no idea if this is actually decent code.
+```sh
+ansible-playbook --limit localhost --connection=local ./ansible-regression-tests-demo/tasks/verify.yml
+```
+
+I don't yet understand how to hook it up to `.main.yml`
