@@ -1,29 +1,27 @@
-- name: "Do helloworld.txt"
+- name: "Folder write and validate"
   block:
-    - name: "Folder write and validate"
-      block:
-        - name: 'WRITE:  Create the "files_go_here" folder if it does not exist'
-          ansible.builtin.file:
-            path: "{{ (lookup('ansible.builtin.env', 'HOME'), 'ansible_play', 'files_go_here') | path_join }}"
-            state: "directory"
-          register: folder_files_go_here
-        - name: "READ:  validator"
-          ansible.builtin.import_role:
-            name: "../roles/common/assert_file_or_folder_exists"
-          vars:
-            param_path: "{{ folder_files_go_here.path }}"
-    - name: "File write and validate"
-      block:
-        - name: 'WRITE:  Create the "helloworld.txt" file if it does not yet exist, and make sure it is filled with the correct content.'
-          ansible.builtin.copy:
-            dest: "{{ (folder_files_go_here.path, 'helloworld.txt') | path_join }}"
-            force: true
-            content: |-
-              hello
-              world
-          register: copy_into_hello_world
-        - name: "READ:  validator"
-          ansible.builtin.import_role:
-            name: "../roles/common/assert_file_or_folder_exists"
-          vars:
-            param_path: "{{ copy_into_hello_world.dest }}"
+    - name: 'WRITE:  Create the "files_go_here" folder if it does not exist'
+      ansible.builtin.file:
+        path: "{{ (lookup('ansible.builtin.env', 'HOME'), 'ansible_play', 'files_go_here') | path_join }}"
+        state: "directory"
+      register: folder_files_go_here
+    - name: "READ:  validator"
+      ansible.builtin.import_role:
+        name: "../roles/common/assert_file_or_folder_exists"
+      vars:
+        param_path: "{{ folder_files_go_here.path }}"
+- name: "File write and validate"
+  block:
+    - name: 'WRITE:  Create the "helloworld.txt" file if it does not yet exist, and make sure it is filled with the correct content.'
+      ansible.builtin.copy:
+        dest: "{{ (folder_files_go_here.path, 'helloworld.txt') | path_join }}"
+        force: true
+        content: |-
+          hello
+          world
+      register: copy_into_hello_world
+    - name: "READ:  validator"
+      ansible.builtin.import_role:
+        name: "../roles/common/assert_file_or_folder_exists"
+      vars:
+        param_path: "{{ copy_into_hello_world.dest }}"
