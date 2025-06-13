@@ -9,7 +9,7 @@
       ansible.builtin.import_role:
         name: "../roles/common/assert_file_or_folder_exists"
       vars:
-        param_path: "{{ folder_files_go_here.path }}"
+        fsexistsrole__param_path: "{{ folder_files_go_here.path }}"
 - name: "File write and validate"
   block:
     - name: 'WRITE:  Create the "helloworld.txt" file if it does not yet exist, and make sure it is filled with the correct content.'
@@ -24,4 +24,4 @@
       ansible.builtin.import_role:
         name: "../roles/common/assert_file_or_folder_exists"
       vars:
-        param_path: "{{ copy_into_hello_world.dest }}"
+        fsexistsrole__param_path: "{{ copy_into_hello_world.dest }}"

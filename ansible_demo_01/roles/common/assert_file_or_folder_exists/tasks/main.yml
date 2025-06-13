@@ -1,9 +1,13 @@
-- name: 'READ:  Query "{{ param_path }}" file/folder status.'
+# - name: "READ:  Verify that input parameter is defined"
+#   assert:
+#     that: fsexistsrole__param_path is defined and fsexistsrole__param_path | length > 0 and fsexistsrole__param_path != None
+#     fail_msg: '"fsexistsrole__param_path" variable needs to non-blank for this role to work.'
+- name: 'READ:  Query "{{ fsexistsrole__param_path }}" file/folder status.'
   ansible.builtin.stat:
-    path: "{{ param_path }}"
+    path: "{{ fsexistsrole__param_path }}"
   register: "stat_param_path"
-- name: 'READ:  Assert that a file/folder named "{{ param_path }}" exists.'
+- name: 'READ:  Assert that a file/folder named "{{ fsexistsrole__param_path }}" exists.'
   ansible.builtin.assert:
     that:
       - "stat_param_path.stat.exists"
-    fail_msg: '"{{ param_path }}" does not exist but should.'
+    fail_msg: '"{{ fsexistsrole__param_path }}" does not exist but should.'
