@@ -1,11 +1,18 @@
-# - name: "READ:  Verify that input parameter is defined"
-#   assert:
-#     that: fsexistsrole__param_path is defined and fsexistsrole__param_path | length > 0 and fsexistsrole__param_path != None
-#     fail_msg: '"fsexistsrole__param_path" variable needs to non-blank for this role to work.'
+# This "main.yml" file is a role, which one can recognize because:
+# 1. It does not have any dashes up top.
+# 2. Its top-level entries invoke "tasks" or "blocks" of tasks (in this case, just tasks).
+#    (To be specific:  it invokes two tasks, back-to-back, in order from top to bottom of the file.)
+#    (A full list of built-in tasks available when using Ansible Core 
+#        is at https://docs.ansible.com/ansible/latest/collections/ansible/builtin/index.html#plugin-index)
+
+# Within the playbook, this "Query file/folder status" list item invokes a "task," which one can recognize because:
+# 1. It does not contain any "hosts", "tasks", "roles," or "block" properties.
 - name: 'READ:  Query "{{ fsexistsrole__param_path }}" file/folder status.'
   ansible.builtin.stat:
     path: "{{ fsexistsrole__param_path }}"
   register: "stat_param_path"
+# Within the playbook, this "Assert that the file/folder exists" list item invokes a "task," which one can recognize because:
+# 1. It does not contain any "hosts", "tasks", "roles," or "block" properties.
 - name: 'READ:  Assert that a file/folder named "{{ fsexistsrole__param_path }}" exists.'
   ansible.builtin.assert:
     that:

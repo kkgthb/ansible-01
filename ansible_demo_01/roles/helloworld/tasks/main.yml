@@ -1,17 +1,37 @@
+# This "main.yml" file is a role, which one can recognize because:
+# 1. It does not have any dashes up top.
+# 2. Its top-level entries invoke "tasks" or "blocks" of tasks (in this case, blocks of tasks).
+#    (To be specific:  it invokes two blocks, back-to-back, in order from top to bottom of the file,
+#        with each block invoking two tasks, back-to-back, in order from top to bottom of the block.)
+#            (A full list of built-in tasks available when using Ansible Core
+#                is at https://docs.ansible.com/ansible/latest/collections/ansible/builtin/index.html#plugin-index)
+
+# Within the playbook, this "Folder write and validate" list item invokes a "block," which one can recognize because:
+# 1. It does not contain any "hosts", "tasks", or "roles" properties.
+# 2. It contains a "block" property.
 - name: "Folder write and validate"
   block:
+    # Within the block, this "Create folder if it does not exist" list item invokes a "task," which one can recognize because:
+    # 1. It does not contain any "hosts", "tasks", "roles," or "block" properties.
     - name: 'WRITE:  Create the "files_go_here" folder if it does not exist'
       ansible.builtin.file:
         path: "{{ (lookup('ansible.builtin.env', 'HOME'), 'ansible_play', 'files_go_here') | path_join }}"
         state: "directory"
       register: folder_files_go_here
+    # Within the block, this "Create folder if it does not exist" list item invokes a "task," which one can recognize because:
+    # 1. It does not contain any "hosts", "tasks", "roles," or "block" properties.
     - name: "READ:  validator"
       ansible.builtin.import_role:
         name: "../roles/common/assert_file_or_folder_exists"
       vars:
         fsexistsrole__param_path: "{{ folder_files_go_here.path }}"
+# Within the playbook, this "File write and validate" list item invokes a "block," which one can recognize because:
+# 1. It does not contain any "hosts", "tasks", or "roles" properties.
+# 2. It contains a "block" property.
 - name: "File write and validate"
   block:
+    # Within the block, this "Create folder if it does not exist" list item invokes a "task," which one can recognize because:
+    # 1. It does not contain any "hosts", "tasks", "roles," or "block" properties.
     - name: 'WRITE:  Create the "helloworld.txt" file if it does not yet exist, and make sure it is filled with the correct content.'
       ansible.builtin.copy:
         dest: "{{ (folder_files_go_here.path, 'helloworld.txt') | path_join }}"
@@ -20,6 +40,8 @@
           hello
           world
       register: copy_into_hello_world
+    # Within the block, this "Create folder if it does not exist" list item invokes a "task," which one can recognize because:
+    # 1. It does not contain any "hosts", "tasks", "roles," or "block" properties.
     - name: "READ:  validator"
       ansible.builtin.import_role:
         name: "../roles/common/assert_file_or_folder_exists"
