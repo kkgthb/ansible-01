@@ -18,3 +18,4 @@
     that:
       - "stat_param_path.stat.exists"
     fail_msg: '"{{ fsexistsrole__param_path }}" does not exist but should.'
+    success_msg: '"{{ fsexistsrole__param_path }}" exists.  Well done.'

@@ -5,3 +5,5 @@
 .terraform*
 terraform.tfstate
 terraform.tfstate.backup
+
+test-results

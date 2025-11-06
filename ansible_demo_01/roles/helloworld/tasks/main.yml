@@ -22,7 +22,7 @@
     # 1. It does not contain any "hosts", "tasks", "roles," or "block" properties.
     - name: "READ:  validator"
       ansible.builtin.import_role:
-        name: "../roles/common/assert_file_or_folder_exists"
+        name: "common/assert_file_or_folder_exists"
       vars:
         fsexistsrole__param_path: "{{ folder_files_go_here.path }}"
 # Within the playbook, this "File write and validate" list item invokes a "block," which one can recognize because:
@@ -44,6 +44,6 @@
     # 1. It does not contain any "hosts", "tasks", "roles," or "block" properties.
     - name: "READ:  validator"
       ansible.builtin.import_role:
-        name: "../roles/common/assert_file_or_folder_exists"
+        name: "common/assert_file_or_folder_exists"
       vars:
         fsexistsrole__param_path: "{{ copy_into_hello_world.dest }}"

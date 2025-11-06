@@ -1,0 +1,27 @@
+name: "Demo - execute Ansible code as a control node"
+
+trigger:
+  - none # For now, only trigger manually, but normally this would say "main" (which is a branch name of this repository).
+
+pool:
+  vmImage: "ubuntu-latest"
+
+stages:
+  - stage: "stage_1"
+    displayName: "First stage.  Adjacent stages run sequentially."
+    jobs:
+      - job: "job_a_within_stage_1"
+        displayName: "First job of first stage.  Adjacent jobs run in parallel."
+        steps:
+          - task: "PowerShell@2"
+            displayName: "Run Ansible file"
+            inputs:
+              targetType: "filePath"
+              filePath: ".cicd_pipeline_helpers/i_only_run_on_posix_not_windows.ps1"
+              workingDirectory: "$(System.DefaultWorkingDirectory)"
+          - task: PublishTestResults@2
+            displayName: "Beautify the Ansible execution results"
+            inputs:
+              testResultsFormat: "JUnit"
+              testResultsFiles: "$(System.DefaultWorkingDirectory)/ansible_demo_01/test-results/junit-results/**/*.xml"
+              searchFolder: "$(System.DefaultWorkingDirectory)"
