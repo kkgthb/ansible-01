@@ -162,8 +162,6 @@ TODO; be sure to clarify that config authN & authZ are different from external-t
 
 Update, 2/4/26:  I successfully used this repository to validate that Ansible is actually installed into the ephemeral Linux boxes that Azure subscribers have access to whenever they poke around the "Azure Cloud Shell":
 
-I just validated in Azure Cloud Shell (which happens to be a random ephemeral Linux box sitting around with Ansible and PowerShell and Git preinstalled) that yes, this works:
-
 1.	Execution:
     * `cd ~`
     * `git clone https://github.com/kkgthb/ansible-01.git`
