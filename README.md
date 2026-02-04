@@ -158,6 +158,26 @@ TODO; be sure to clarify that config authN & authZ are different from external-t
 
 ---
 
+## Quick-testing an Ansible installation
+
+Update, 2/4/26:  I successfully used this repository to validate that Ansible is actually installed into the ephemeral Linux boxes that Azure subscribers have access to whenever they poke around the "Azure Cloud Shell":
+
+I just validated in Azure Cloud Shell (which happens to be a random ephemeral Linux box sitting around with Ansible and PowerShell and Git preinstalled) that yes, this works:
+
+1.	Execution:
+    * `cd ~`
+    * `git clone https://github.com/kkgthb/ansible-01.git`
+    * `& ~/ansible-01/.cicd_pipeline_helpers/i_only_run_on_posix_not_windows.ps1`
+2.	Validation:
+    * `ls -la ~/ansible_play/files_go_here`
+        * _(Yes, `helloworld.txt` file shows up)_
+    * `ls -la ~/ansible-01/ansible_demo_01/test-results/junit-results`
+        * _(Yes, some `*.xml` files show up)_
+
+TODO:  add a Bash equivalent to `i_only_run_on_posix_not_windows.ps1` so this repo can serve as a more general-purpose "did I get the Ansible Core CLI and its underlying Python dependency installed right?" quick-check, even when you don't have a PowerShell runtime installed onto your Linux box.  That seems like a friendly service to provide the world.
+
+---
+
 ## Related blog post
 
 * [Why use Ansible for infrastructure as code?](https://katiekodes.com/why-ansible/)
