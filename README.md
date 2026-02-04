@@ -179,6 +179,7 @@ Update, 2/4/26:  I successfully used this repository to validate that Ansible is
 
 ---
 
-## Related blog post
+## Related blog posts
 
 * [Why use Ansible for infrastructure as code?](https://katiekodes.com/why-ansible/)
+* [How to test if Ansible is installed](https://katiekodes.com/is-ansible-installed/)
