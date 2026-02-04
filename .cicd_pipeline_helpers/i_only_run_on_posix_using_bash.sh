@@ -5,8 +5,8 @@
 
 set -e
 
-script_root_parent="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ansible_code_directory="${script_root_parent}/ansible_demo_01"
+script_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ansible_code_directory="${script_directory}/../ansible_demo_01"
 ansible_configuration_file="${ansible_code_directory}/ansible.cfg"
 write_results_here="${ansible_code_directory}/test-results/junit-results"
 ansible_playbook_main_file="${ansible_code_directory}/playbooks/main.yml"
