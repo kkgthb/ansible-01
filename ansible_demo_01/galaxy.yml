@@ -1,0 +1,7 @@
+namespace: "katiekodes"
+name: "ansible_demo_first"
+description: "My first collection"
+authors:
+  - "Katie Kodes"
+readme: "README.md"
+version: 0.1.0
