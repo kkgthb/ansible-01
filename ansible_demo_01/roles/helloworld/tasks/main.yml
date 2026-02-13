@@ -15,7 +15,7 @@
     # 1. It does not contain any "hosts", "tasks", "roles," or "block" properties.
     - name: 'WRITE:  Create the "files_go_here" folder if it does not exist'
       ansible.builtin.file:
-        path: "{{ (lookup('ansible.builtin.env', 'HOME'), 'ansible_play', 'files_go_here') | path_join }}"
+        path: "{{ (ansible_user_dir, 'ansible_play', 'files_go_here') | path_join }}"
         state: "directory"
       register: folder_files_go_here
     # Within the block, this "Create folder if it does not exist" list item invokes a "task," which one can recognize because:
