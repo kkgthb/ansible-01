@@ -11,39 +11,76 @@
 # 2. It contains a "block" property.
 - name: "Folder write and validate"
   block:
-    # Within the block, this "Create folder if it does not exist" list item invokes a "task," which one can recognize because:
-    # 1. It does not contain any "hosts", "tasks", "roles," or "block" properties.
-    - name: 'WRITE:  Create the "files_go_here" folder if it does not exist'
-      ansible.builtin.file:
-        path: "{{ (ansible_user_dir, 'ansible_play', 'files_go_here') | path_join }}"
-        state: "directory"
-      register: folder_files_go_here
-    # Within the block, this "Create folder if it does not exist" list item invokes a "task," which one can recognize because:
-    # 1. It does not contain any "hosts", "tasks", "roles," or "block" properties.
-    - name: "READ:  validator"
-      ansible.builtin.import_role:
-        name: "common/assert_file_or_folder_exists"
-      vars:
-        fsexistsrole__param_path: "{{ folder_files_go_here.path }}"
+    # Within the "folder" block, we break into two more blocks:  "Linux" and "Windows."
+    - name: "Linux"
+      when: ansible_facts['os_family'] != 'Windows'
+      block:
+        # Within the block, this "Create folder if it does not exist" list item invokes a "task," which one can recognize because:
+        # 1. It does not contain any "hosts", "tasks", "roles," or "block" properties.
+        - name: 'WRITE:  Create the "files_go_here" folder if it does not exist.  (If Linux)'
+          ansible.builtin.file:
+            path: "{{ (ansible_facts['user_dir'], 'ansible_play', 'files_go_here') | path_join }}"
+            state: "directory"
+          register: folder_files_go_here_linux
+        # Within the block, this "Create folder if it does not exist" list item invokes a "task," which one can recognize because:
+        # 1. It does not contain any "hosts", "tasks", "roles," or "block" properties.
+        - name: "READ:  validator.  (If Linux)"
+          ansible.builtin.import_role:
+            name: "common/assert_file_or_folder_exists"
+          vars:
+            fsexistsrole__param_path: "{{ folder_files_go_here_linux.get('path') }}"
+    - name: "Windows"
+      when: ansible_facts['os_family'] == 'Windows'
+      block:
+        - name: 'WRITE:  Create the "files_go_here" folder if it does not exist.  (If Windows)'
+          ansible.windows.win_file:
+            path: "{{ (ansible_env.get('USERPROFILE'), 'ansible_play', 'files_go_here') | path_join }}"
+            state: "directory"
+          # register: folder_files_go_here_windows # No point -- there are no useful return values from win_file.
+        - name: "READ:  validator.  (If Windows)"
+          ansible.builtin.import_role:
+            name: "common/assert_file_or_folder_exists"
+          vars:
+            fsexistsrole__param_path: "{{ (ansible_env.get('USERPROFILE'), 'ansible_play', 'files_go_here') | path_join }}" # Have to rebuild because win_file has no useful return values.
 # Within the playbook, this "File write and validate" list item invokes a "block," which one can recognize because:
 # 1. It does not contain any "hosts", "tasks", or "roles" properties.
 # 2. It contains a "block" property.
 - name: "File write and validate"
   block:
-    # Within the block, this "Create folder if it does not exist" list item invokes a "task," which one can recognize because:
-    # 1. It does not contain any "hosts", "tasks", "roles," or "block" properties.
-    - name: 'WRITE:  Create the "helloworld.txt" file if it does not yet exist, and make sure it is filled with the correct content.'
-      ansible.builtin.copy:
-        dest: "{{ (folder_files_go_here.path, 'helloworld.txt') | path_join }}"
-        force: true
-        content: |-
-          hello
-          world
-      register: copy_into_hello_world
-    # Within the block, this "Create folder if it does not exist" list item invokes a "task," which one can recognize because:
-    # 1. It does not contain any "hosts", "tasks", "roles," or "block" properties.
-    - name: "READ:  validator"
-      ansible.builtin.import_role:
-        name: "common/assert_file_or_folder_exists"
-      vars:
-        fsexistsrole__param_path: "{{ copy_into_hello_world.dest }}"
+    # Within the "file" block, we break into two more blocks:  "Linux" and "Windows."
+    - name: "Linux"
+      when: ansible_facts['os_family'] != 'Windows'
+      block:
+        # Within the block, this "Create folder if it does not exist" list item invokes a "task," which one can recognize because:
+        # 1. It does not contain any "hosts", "tasks", "roles," or "block" properties.
+        - name: 'WRITE:  Create the "helloworld.txt" file if it does not yet exist, and make sure it is filled with the correct content.  (If Linux)'
+          ansible.builtin.copy:
+            dest: "{{ (folder_files_go_here_linux.path, 'helloworld.txt') | path_join }}"
+            force: true
+            content: |-
+              hello
+              world
+          register: copy_into_hello_world_linux
+        # Within the block, this "Create folder if it does not exist" list item invokes a "task," which one can recognize because:
+        # 1. It does not contain any "hosts", "tasks", "roles," or "block" properties.
+        - name: "READ:  validator.  (If Linux)"
+          ansible.builtin.import_role:
+            name: "common/assert_file_or_folder_exists"
+          vars:
+            fsexistsrole__param_path: "{{ copy_into_hello_world_linux.get('dest') }}"
+    - name: "Windows"
+      when: ansible_facts['os_family'] == 'Windows'
+      block:
+        - name: 'WRITE:  Create the "helloworld.txt" file if it does not yet exist, and make sure it is filled with the correct content.  (If Windows)'
+          ansible.windows.win_copy:
+            dest: "{{ (ansible_env.get('USERPROFILE'), 'ansible_play', 'files_go_here', 'helloworld.txt') | path_join }}" # Have to rebuild because win_file has no useful return values.
+            force: true
+            content: |-
+              hello
+              world
+          register: copy_into_hello_world_windows
+        - name: "READ:  validator.  (If Windows)"
+          ansible.builtin.import_role:
+            name: "common/assert_file_or_folder_exists"
+          vars:
+            fsexistsrole__param_path: "{{ copy_into_hello_world_windows.get('dest') }}"
